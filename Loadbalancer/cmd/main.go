@@ -5,7 +5,9 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/rs/zerolog/log"
 	roundrobin "github.com/vk-NEU7/systemdesign/Loadbalancer/RoundRobin"
+	"rsc.io/quote"
 )
 
 func main() {
@@ -20,6 +22,7 @@ func main() {
 	}()
 
 	fmt.Println("A http server is running on port 80")
+	fmt.Println(quote.Go())
 
 	mux.HandleFunc("/", handleRequest)
 	http.ListenAndServe(":80", mux)
@@ -63,6 +66,7 @@ func startBackendServer(addr string, serverName string) {
 		w.WriteHeader(http.StatusOK)
 		message := fmt.Sprintf("Server %s is responding from %s", serverName, addr)
 		io.WriteString(w, message)
+		log.Info().Msg(message)
 	})
 
 	http.ListenAndServe(addr, mux)
